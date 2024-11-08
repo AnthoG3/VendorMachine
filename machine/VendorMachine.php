@@ -4,14 +4,13 @@
 //On créé la classe "VendorMachine"
 class VendorMachine
 {
-    private $snacks; //Snacks de notre machine
-    private $cashAmount; //Cash de notre machine
-    private $isOn; //Booléen qui indique si la machine est éteinte ou allumée
+    public $snacks; //Snacks de notre machine
+    public $cashAmount; //Cash de notre machine
+    public $isOn; //Booléen qui indique si la machine est éteinte ou allumée
 
 
     //Constructeur de la classe
-    public function __construct()
-    {
+    public function __construct() {
 
         //Mise en place du tableau des snacks
         $this->snacks = [
@@ -42,7 +41,7 @@ class VendorMachine
         ]
         ];
         $this->cashAmount = 0; //Met le cash de la machine à 0
-        $this->isOn = false; //La machine commence par l'état "éteinte"
+        $this->isOn = true; //La machine commence par l'état "éteinte"
     }
 
     //Méthode pour allumer la machine
@@ -53,13 +52,17 @@ class VendorMachine
 //Méthode pour éteindre la machine
     public function turnOff()
     {
-        $currentHour = (int) date('H'); //Initialisation a l'heure actuelle
-        if ($currentHour >= 18) {  //Boucle qui permet de savoir si il est 18h ou plus
+        $currentDate = new DateTime();//Initialisation a l'heure actuelle
+        $currentHour = $currentDate->format("H");
+
+
+        if ($currentHour >= 10) {
             $this->isOn = false;
         } else {
-            echo "La machine ne peut pas être éteinte avant 18h. ";
+            throw new Exception('Vous ne pouvez pas éteindre la machine avant 18h');
         }
     }
+
 
     //Méthode pour acheter un snack
     public function buySnack($snackName)
@@ -129,23 +132,6 @@ class VendorMachine
         $this->cashAmount -= $randomCash;
 
         echo "Un {$randomSnack['name']} est tombé ! Et {$randomCash}€ sont sortis de la machine.";
-    }
-
-    //Retourne le tableau des snacks
-    public function getSnacks()
-    {
-        return $this->snacks;
-    }
-
-    //Retourne le montant d'argent dans la machine
-    public function getCashAmount()
-    {
-        return $this->cashAmount;
-    }
-//Retourne si la machine est sur on ou off
-    public function isOn()
-    {
-        return $this->isOn;
     }
 }
 
