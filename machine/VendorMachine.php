@@ -34,9 +34,14 @@ class VendorMachine
                 "name" => "Bounty",
                 "price" => 2.5,
                 "quantity" => 5
-            ]
+            ],
+            [
+            "name" => "Banane",   //J'ai rendu le distributeur un peu "healthy"
+            "price" => 1,
+            "quantity" => 5
+        ]
         ];
-        $this->cashAmount = 0; //Départ du montant de cash a 0
+        $this->cashAmount = 0; //Met le cash de la machine à 0
         $this->isOn = false; //La machine commence par l'état "éteinte"
     }
 
@@ -52,7 +57,7 @@ class VendorMachine
         if ($currentHour >= 18) {  //Boucle qui permet de savoir si il est 18h ou plus
             $this->isOn = false;
         } else {
-            echo "La machine ne peut pas être éteinte avant 18h.\n";
+            echo "La machine ne peut pas être éteinte avant 18h. ";
         }
     }
 
@@ -62,7 +67,7 @@ class VendorMachine
 
         //On verifie si la machine est allumée
         if (!$this->isOn) {
-            echo "La machine est éteinte.";
+            echo "La machine est éteinte. ";
             return;
         }
 //On parcours le tableau des snacks
@@ -77,16 +82,16 @@ class VendorMachine
 
                     //Ajout du prix au montant total
                     $this->cashAmount += $snack['price'];
-                    echo "Vous avez acheté un {$snackName}. Montant payé : {$snack['price']}€";
+                    echo "Vous avez acheté un {$snackName}. Montant payé : {$snack['price']}€ ! ";
                     return;
                 } else {
-                    echo "Désolé, {$snackName} n'est plus disponible.";
+                    echo "Désolé, {$snackName} n'est plus disponible. ";
                     return;
                 }
             }
         }
 
-        echo "Snack non trouvé.";
+        echo "Snack non trouvé. ";
     }
 //Methode pour mettre un coup de pied dans la machine
     public function shootWithFoot()
@@ -94,7 +99,7 @@ class VendorMachine
 
         //On verifie si la machine est allumée
         if (!$this->isOn) {
-            echo "La machine est éteinte.";
+            echo "La machine est éteinte. ";
             return;
         }
 
@@ -114,7 +119,11 @@ class VendorMachine
         $randomSnack['quantity']--;
 
         //Un montant aléatoire de cash tombe de la machine
-        $randomCash = mt_rand(0, min(100, $this->cashAmount * 100)) / 100;
+        //mt_rand genere un nombre entier aléatoire plus rapide que rand()
+        //on choisis un nombre entre 0 et -->
+        //$this->>cashAmount * 100 on multiplie "cashAmount par 100 pour le convertir en centimes.
+        //Ensuite on divise le nombre entier du résultat précedent par 100 pour avoir un montant aléatoire entre 0 et $cashAmount.
+        $randomCash = mt_rand(0, $this->cashAmount * 100) / 100;
 
         //Soustraction du montant au total de cash
         $this->cashAmount -= $randomCash;
@@ -133,7 +142,7 @@ class VendorMachine
     {
         return $this->cashAmount;
     }
-//Retourne si la machien est sur on ou off
+//Retourne si la machine est sur on ou off
     public function isOn()
     {
         return $this->isOn;
@@ -143,6 +152,6 @@ class VendorMachine
 
 $machine = new VendorMachine();
 $machine->turnOn();
-$machine->buySnack("Mars");
+$machine->buySnack("Banane");
 $machine->shootWithFoot();
 $machine->turnOff();
